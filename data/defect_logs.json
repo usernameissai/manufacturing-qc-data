@@ -1,1 +1,180 @@
+{
+  "_meta": {
+    "description": "Reference knowledge base of automotive (vehicle assembly) defect types and their criticality classification. Used to ground AI report generation via RAG so severity ratings are consistent instead of hallucinated.",
+    "criticality_levels": {
+      "Critical": "Safety, regulatory (FMVSS/UNECE), or drivability failure risk. Vehicle must be stopped from shipping, quarantined, or reworked under CAPA before release. Includes anything that could trigger a field recall.",
+      "Major": "Significant deviation from spec affecting function, durability, or customer perception (e.g., warranty claim risk), but not an immediate safety failure.",
+      "Minor": "Cosmetic or low-impact deviation. Does not affect function or safety. Logged for trend monitoring; corrective action optional unless recurring."
+    },
+    "schema_version": "1.0",
+    "domain": "automotive_vehicle_assembly"
+  },
+  "defects": [
+    {
+      "id": "DEF-A01",
+      "defect_type": "Structural Weld Defect",
+      "category": "Body Shop",
+      "default_criticality": "Critical",
+      "description": "Incomplete penetration, porosity, or missing weld on a body structural joint (e.g., pillar, rocker, crossmember).",
+      "typical_causes": ["Robot weld parameter drift", "Poor panel fit-up", "Electrode wear", "Material coating contamination"],
+      "recommended_action": "Stop line, quarantine affected VINs, weld lab destructive test on sample, root cause investigation before restart.",
+      "aliases": ["weld porosity", "incomplete weld", "missing weld", "weld crack"],
+      "source": "seed"
+    },
+    {
+      "id": "DEF-A02",
+      "defect_type": "Brake System Fluid Leak",
+      "category": "Chassis / Brakes",
+      "default_criticality": "Critical",
+      "description": "Detected leak at brake line fitting, caliper, or master cylinder during end-of-line test.",
+      "typical_causes": ["Under-torqued fitting", "Damaged seal/O-ring", "Cross-threaded connection"],
+      "recommended_action": "Quarantine vehicle, do not release, rework by certified technician, retest full brake system before release.",
+      "aliases": ["brake leak", "hydraulic leak", "brake fluid seepage"],
+      "source": "seed"
+    },
+    {
+      "id": "DEF-A03",
+      "defect_type": "Airbag / SRS Circuit Fault",
+      "category": "Electrical / Safety Systems",
+      "default_criticality": "Critical",
+      "description": "Supplemental Restraint System (SRS) diagnostic trouble code indicating airbag deployment circuit fault, connector fault, or sensor failure.",
+      "typical_causes": ["Connector not fully seated", "Harness pinch during assembly", "Sensor damage in transit"],
+      "recommended_action": "Vehicle held at end-of-line, SRS system re-diagnosed and repaired by trained technician, full system re-test required before release.",
+      "aliases": ["SRS fault", "airbag DTC", "restraint system error"],
+      "source": "seed"
+    },
+    {
+      "id": "DEF-A04",
+      "defect_type": "Body Panel Gap Out of Tolerance",
+      "category": "Body Shop / Fit & Finish",
+      "default_criticality": "Major",
+      "description": "Panel-to-panel gap or flush condition (e.g., door, hood, fender) outside specified tolerance band.",
+      "typical_causes": ["Fixture wear", "Hinge misalignment", "Upstream stamping variation"],
+      "recommended_action": "Adjust at trim/final line if within correctable range, log for SPC trend, escalate to Major if recurring on same station.",
+      "aliases": ["panel gap", "flush variation", "fit and finish deviation"],
+      "source": "seed"
+    },
+    {
+      "id": "DEF-A05",
+      "defect_type": "Paint Surface Defect",
+      "category": "Paint Shop",
+      "default_criticality": "Minor",
+      "description": "Cosmetic paint finish deviation such as orange peel, runs, dirt-in-paint, or minor color mismatch.",
+      "typical_causes": ["Booth contamination", "Spray gun parameter drift", "Ambient humidity variation"],
+      "recommended_action": "Buff/polish rework if within cosmetic spec; escalate to Major if defect is on a highly visible panel and cannot be corrected without repaint.",
+      "aliases": ["orange peel", "paint run", "dirt nib", "color mismatch"],
+      "source": "seed"
+    },
+    {
+      "id": "DEF-A06",
+      "defect_type": "Fastener Torque Below Specification",
+      "category": "Chassis / Powertrain",
+      "default_criticality": "Critical",
+      "description": "Critical fastener (wheel, suspension, steering, seatbelt anchor, engine mount) torqued below specified value, detected via torque audit or DC tool data.",
+      "typical_causes": ["Tool calibration drift", "Operator error", "Cross-threaded fastener"],
+      "recommended_action": "Vehicle held, fastener re-torqued and verified by certified technician, tool recalibrated, containment audit of same shift's output.",
+      "aliases": ["under-torque", "loose fastener", "torque failure"],
+      "source": "seed"
+    },
+    {
+      "id": "DEF-A07",
+      "defect_type": "Body Panel Corrosion",
+      "category": "Material / Body",
+      "default_criticality": "Major",
+      "description": "Visible surface oxidation on body panel or underbody component prior to or after paint application.",
+      "typical_causes": ["E-coat coverage gap", "Storage humidity exposure", "Damaged coating pre-paint"],
+      "recommended_action": "Segregate affected units, assess coating coverage, review pre-paint storage conditions.",
+      "aliases": ["rust", "corrosion spot", "coating failure"],
+      "source": "seed"
+    },
+    {
+      "id": "DEF-A08",
+      "defect_type": "Wiring Harness Chafing / Pinch",
+      "category": "Electrical",
+      "default_criticality": "Critical",
+      "description": "Wiring harness insulation damaged, pinched, or chafed against a structural or moving component, creating short-circuit or fire risk.",
+      "typical_causes": ["Harness routing error", "Missing or misplaced grommet", "Insufficient clip retention"],
+      "recommended_action": "Vehicle held, harness inspected and repaired/replaced, routing verified against build spec, containment check of same-shift output.",
+      "aliases": ["harness pinch", "wire chafing", "insulation damage"],
+      "source": "seed"
+    },
+    {
+      "id": "DEF-A09",
+      "defect_type": "Door / Hood / Trunk Misalignment",
+      "category": "Body Shop / Fit & Finish",
+      "default_criticality": "Major",
+      "description": "Closure panel (door, hood, trunk/liftgate) misaligned relative to body opening, affecting operation or appearance.",
+      "typical_causes": ["Hinge fixture wear", "Incorrect installation torque sequence", "Upstream body variation"],
+      "recommended_action": "Rework at trim/final line, verify hinge and striker adjustment, log for SPC trend.",
+      "aliases": ["door misalignment", "hood gap", "closure panel misfit"],
+      "source": "seed"
+    },
+    {
+      "id": "DEF-A10",
+      "defect_type": "Wheel Alignment Out of Specification",
+      "category": "Chassis",
+      "default_criticality": "Major",
+      "description": "Toe, camber, or caster measurement outside specification during end-of-line alignment check.",
+      "typical_causes": ["Suspension component installation variance", "Alignment rack calibration drift", "Sub-frame mounting variance"],
+      "recommended_action": "Re-align at end-of-line, verify suspension component torque and installation, escalate to Critical if unable to bring within spec.",
+      "aliases": ["toe out of spec", "camber deviation", "alignment failure"],
+      "source": "seed"
+    },
+    {
+      "id": "DEF-A11",
+      "defect_type": "Interior Trim Fitment Gap",
+      "category": "Interior / Trim",
+      "default_criticality": "Minor",
+      "description": "Visible gap or misalignment in interior trim components (dash, console, door panels) not affecting function.",
+      "typical_causes": ["Clip retention failure", "Component tolerance stack-up", "Installation sequence error"],
+      "recommended_action": "Log for trend monitoring; rework at final line if within correctable range.",
+      "aliases": ["trim gap", "dash panel misfit", "console fitment issue"],
+      "source": "seed"
+    },
+    {
+      "id": "DEF-A12",
+      "defect_type": "Exterior Panel Scratch/Dent",
+      "category": "Body / Cosmetic",
+      "default_criticality": "Minor",
+      "description": "Superficial scratch or dent on exterior body panel not affecting structural integrity.",
+      "typical_causes": ["Handling damage in conveyance", "Tooling contact", "Transport/logistics damage"],
+      "recommended_action": "Cosmetic rework (paintless dent repair / touch-up) if within customer-visible zone; log for trend monitoring.",
+      "aliases": ["exterior scratch", "panel dent", "cosmetic body damage"],
+      "source": "seed"
+    },
+    {
+      "id": "DEF-A13",
+      "defect_type": "ECU Software Flash/Programming Error",
+      "category": "Electrical / Software",
+      "default_criticality": "Critical",
+      "description": "Electronic Control Unit (ECU) failed to flash correctly, has incorrect software/calibration version, or fails post-flash verification.",
+      "typical_causes": ["Flash tool communication failure", "Incorrect calibration file selected", "Network/CAN bus disturbance during flash"],
+      "recommended_action": "Vehicle held, re-flash with correct verified calibration, full functional test before release, log calibration version for traceability.",
+      "aliases": ["ECU flash failure", "wrong calibration", "software mismatch"],
+      "source": "seed"
+    },
+    {
+      "id": "DEF-A14",
+      "defect_type": "Fluid Fill Level Discrepancy",
+      "category": "Powertrain",
+      "default_criticality": "Major",
+      "description": "Engine oil, coolant, brake fluid, or transmission fluid level outside specified range at end-of-line check.",
+      "typical_causes": ["Fill station dispensing error", "Sensor calibration drift", "Leak masking correct initial fill"],
+      "recommended_action": "Correct fill level, inspect for leak source if level is low, re-verify before release.",
+      "aliases": ["low coolant", "overfilled oil", "fluid level error"],
+      "source": "seed"
+    },
+    {
+      "id": "DEF-A15",
+      "defect_type": "Seatbelt Anchor Fastening Fault",
+      "category": "Interior / Safety Systems",
+      "default_criticality": "Critical",
+      "description": "Seatbelt anchor or buckle fastener missing, cross-threaded, or below specified torque.",
+      "typical_causes": ["Operator error", "Tool malfunction", "Missing fastener in kit"],
+      "recommended_action": "Vehicle held, anchor point re-secured and torque-verified by certified technician, containment audit of same-shift output.",
+      "aliases": ["seatbelt anchor fault", "buckle fastener error", "restraint anchor defect"],
+      "source": "seed"
+    }
+  ]
+}
 
